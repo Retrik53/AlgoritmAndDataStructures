@@ -4,85 +4,127 @@
     {
         static void Main(string[] args)
         {
-            // Инициализация переменных для статистики игры
-            int min = 0;           // Минимальное количество попыток для победы
-            int max = 0;           // Максимальное количество попыток для победы
-            int count = 0;         // Общее количество попыток во всех играх
-            int countGame = 0;     // Количество сыгранных игр
+            // Задание 1
+            //    static bool CanConstruct(string ransomNote, string magazine)
+            //    {
+            //        char[] ransomChars = ransomNote.ToCharArray();
+            //        char[] magazineChars = magazine.ToCharArray();
 
-            // Создание генератора случайных чисел
-            Random rnd = new Random();
-            char answer = 'y';     // Переменная для ответа на вопрос о повторной игре
+            //        Array.Sort(ransomChars);
+            //        Array.Sort(magazineChars);
 
-            // Основной игровой цикл - выполняется, пока игрок хочет играть
-            do
+            //        int i = 0;
+            //        int j = 0;
+
+            //        while (i < ransomChars.Length && j < magazineChars.Length)
+            //        {
+            //            if (ransomChars[i] == magazineChars[j])
+            //            {
+            //                i++;
+            //                j++;
+            //            }
+            //            else if (ransomChars[i] > magazineChars[j])
+            //            {
+            //                j++;
+            //            }
+            //            else
+            //            {
+            //                return false;
+            //            }
+            //        }
+            //        return i == ransomChars.Length;
+            //    }
+
+            //    bool result1 = CanConstruct("a", "b");
+            //    bool result2 = CanConstruct("aa", "ab");
+            //    bool result3 = CanConstruct("aa", "aab");
+
+            //    Console.WriteLine(result1);     
+            //    Console.WriteLine(result2);   
+            //    Console.WriteLine(result3);          
+            //}
+
+
+            //Задание 2
+            //    static int FindLucky(int[] arr)
+            //{
+            //    Array.Sort(arr);
+
+            //    int maxLucky = 0;
+            //    int i = 0;
+
+            //    while (i < arr.Length)
+            //    {
+            //        int currentNumber = arr[i];
+            //        int count = 0;
+
+            //        while (i < arr.Length && arr[i] == currentNumber)
+            //        {
+            //            count++;
+            //            i++;
+            //        }
+
+            //        if (currentNumber == count)
+            //        {
+            //            maxLucky = currentNumber;
+            //        }
+            //    }
+
+            //    return maxLucky;
+            //}
+            //    int[] result1 = {2, 2, 3, 4 };
+            //    int[] result2 = {1, 2, 2, 3, 3, 3 };
+            //    int[] result3 = {5};
+            //    int[] result4 = {2, 2, 2, 3, 3};
+
+            //    Console.WriteLine(FindLucky(result1));
+            //    Console.WriteLine(FindLucky(result2));
+            //    Console.WriteLine(FindLucky(result3));
+            //    Console.WriteLine(FindLucky(result4));
+            //}
+
+            //Задание 3
+            static int LongestOnes(int[] nums, int k)
             {
-                int counter = 0;   // Счетчик попыток в текущей игре
+                int left = 0;
+                int maxLength = 0;
+                int zeroCount = 0;
 
-                // Генерация случайного числа от 1 до 99
-                int number = rnd.Next(1, 100);
-
-                Console.WriteLine("Try guess number?");
-
-                // Бесконечный цикл угадывания числа
-                while (true)
+                for (int right = 0; right < nums.Length; right++)
                 {
-                    counter++;      // Увеличиваем счетчик попыток
-                    int UserNumber = 0;   // Переменная для числа, введенного пользователем
-
-                    Console.WriteLine("Input namber at from [1;100]");
-
-                    // Цикл для проверки корректности ввода (максимум 3 попытки)
-                    for (int i = 0; i < 3; i++)
+                    if (nums[right] == 0)
                     {
-                        // Проверка, является ли ввод числом и находится ли оно в диапазоне [1;100]
-                        if (!int.TryParse(Console.ReadLine(), out UserNumber)
-                            || UserNumber > 100 || UserNumber < 1)
-                            Console.WriteLine("Input namber at from [1;100]");
-                        else break;   // Если ввод корректен, выходим из цикла проверки
+                        zeroCount++;
+                    }
 
-                        // Если после 3 попыток ввод некорректен
-                        if (i == 2)
+                    while (zeroCount > k)
+                    {
+                        if (nums[left] == 0)
                         {
-                            Console.WriteLine("You is stupid");
-                            return;    // Завершаем программу
+                            zeroCount--;
                         }
+                        left++;
                     }
 
-                    // Сравнение введенного числа с загаданным
-                    if (UserNumber > number)
-                        Console.WriteLine("Your number is greater");   // Число больше загаданного
-                    else if (UserNumber < number)
-                        Console.WriteLine("Your number is less");      // Число меньше загаданного
-                    else
-                    {
-                        // Игрок угадал число
-                        Console.WriteLine("You are win!!!");
-
-                        // Обновление статистики
-                        // Для минимального количества попыток
-                        if (min == 0 || min > counter) min = counter;
-
-                        // Для максимального количества попыток
-                        max = max < counter ? counter : max;
-
-                        // Обновление общего количества попыток и количества игр
-                        count += counter;
-                        countGame++;
-
-                        break;   // Выход из цикла угадывания
-                    }
+                    maxLength = Math.Max(maxLength, right - left + 1);
                 }
 
-                // Запрос на повторную игру
-                Console.WriteLine("Do you want play game?");
-                answer = Convert.ToChar(Console.Read());   // Чтение ответа (ожидается 'y' или что-то другое)
+                return maxLength;
+            }
+            int[] result1 = { 1, 1, 0, 1, 1, 1 };
+            int k_res1 = 0;
 
-            } while (answer == 'y');   // Продолжаем, если ответ 'y'
+            Console.WriteLine(LongestOnes(result1, k_res1)); // 2
 
-            // Вывод итоговой статистики игр
-            // ang - среднее количество попыток (count / countGame)
-            Console.WriteLine($"min = {min} max = {max} ang = {(double)count / countGame}");
+            int[] result2 = { 1, 1, 0, 1, 1, 1};
+            int k_res2 = 1;
+
+            Console.WriteLine(LongestOnes(result2, k_res2)); // 6
+
+            int[] result3 = {0, 0, 0, 0};
+            int k_res3 = 2;
+
+            Console.WriteLine(LongestOnes(result3, k_res3)); // 2
         }
     }
 }
